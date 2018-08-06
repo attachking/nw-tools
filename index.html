@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="./style/index.css">
+</head>
+<body>
+  <div id="app" class="main">
+    <div class="userInfo">
+      <img :src="userInfo.Face" alt="">
+      <span>{{userInfo.nick}}</span>
+      <button @click="login">登录</button>
+      <select v-model="server1">
+        <option :value="val.v" v-for="val in servers" :key="val.v">{{val.t}}</option>
+      </select>
+      <select v-model="server2">
+        <option :value="val.v" v-for="val in servers2" :key="val.v">{{val.t}}</option>
+      </select>
+      <select v-model="server3"></select>
+    </div>
+  </div>
+  <script src="./lib/vue.min.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

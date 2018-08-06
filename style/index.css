@@ -1,0 +1,31 @@
+body, html {
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+
+.main {
+    margin: 10px 10px;
+}
+
+.userInfo img {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.userInfo span {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.userInfo button {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.userInfo select {
+    display: inline-block;
+    vertical-align: middle;
+}

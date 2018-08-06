@@ -1,0 +1,38 @@
+{
+  "main": "index.html",
+  "name": "nwjs",
+  "description": "使用nw.js封装的App",
+  "version": "0.0.1",
+  "keywords": [
+    "nw",
+    "客户端"
+  ],
+  "node-main": "main.js",
+  "nodejs": true,
+  "single-instance": true,
+  "window": {
+    "title": "小工具",
+    "icon": "favicon.png",
+    "toolbar": true,
+    "frame": true,
+    "width": 600,
+    "height": 300,
+    "position": "center",
+    "min_width": 600,
+    "min_height": 200,
+    "always-on-top": false,
+    "fullscreen": false,
+    "show_in_taskbar": true
+  },
+  "webkit": {
+    "plugin": true,
+    "java": false,
+    "page-cache": false
+  },
+  "chromium-args": "-allow-file-access-from-files",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "iconv-lite": "^0.4.23",
+    "request": "^2.87.0"
+  }
+}
