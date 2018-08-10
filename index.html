@@ -6,21 +6,45 @@
   <link rel="stylesheet" href="./style/index.css">
 </head>
 <body>
-  <div id="app" class="main">
-    <div class="userInfo">
-      <img :src="userInfo.Face" alt="">
-      <span>{{userInfo.nick}}</span>
-      <button @click="login">登录</button>
-      <select v-model="server1">
-        <option :value="val.v" v-for="val in servers" :key="val.v">{{val.t}}</option>
-      </select>
-      <select v-model="server2">
-        <option :value="val.v" v-for="val in servers2" :key="val.v">{{val.t}}</option>
-      </select>
-      <select v-model="server3"></select>
+  <div class="bg"></div>
+  <div class="container" id="app">
+    <div class="menu">
+      <div class="left">活动助手</div>
+      <div class="right">
+        <div class="mini" title="最小化" @click="mini">-</div>
+        <div class="close" title="退出" @click="close">&times;</div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="userInfo">
+        <img :src="userInfo.Face" v-if="userInfo.nick">
+        <span :title="userInfo.nick">{{userInfo.nick || '未登录'}}</span>
+        <select v-model="server1" @change="handleServer1($event)">
+          <option value="">选择大区</option>
+          <option :value="val.v" v-for="(val, key) in servers" :key="key">{{val.t}}</option>
+        </select>
+        <select v-model="server2" @change="handleServer2($event)">
+          <option value="">选择服务器</option>
+          <option :value="val.v" v-for="(val, key) in servers2" :key="key">{{val.t}}</option>
+        </select>
+        <select v-model="server3" @change="handleServer3($event)">
+          <option value="">选择角色</option>
+          <option :value="val.value" v-for="(val, key) in servers3" :key="key">{{val.name}}</option>
+        </select>
+      </div>
+      <div class="log-con">
+        <div class="log" id="log">
+          <p v-for="(val, key) in logs" :key="key">{{val}}</p>
+        </div>
+        <div class="pull">
+          <button @click="login" class="login-btn">登录/切换账号</button>
+          <button @click="pull" class="pull-btn">{{processing ? '停止' : '一键领取'}}</button>
+          <button @click="about">关于我们</button>
+        </div>
+      </div>
     </div>
   </div>
   <script src="./lib/vue.min.js"></script>
-  <script src="index.js"></script>
+  <script src="js/index.js"></script>
 </body>
 </html>

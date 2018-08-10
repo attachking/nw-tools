@@ -7,19 +7,21 @@
     "nw",
     "客户端"
   ],
-  "node-main": "main.js",
+  "node-main": "./js/main.js",
   "nodejs": true,
   "single-instance": true,
   "window": {
     "title": "小工具",
-    "icon": "favicon.png",
+    "icon": "icon.png",
     "toolbar": true,
-    "frame": true,
-    "width": 600,
+    "frame": false,
+    "width": 500,
     "height": 300,
     "position": "center",
-    "min_width": 600,
-    "min_height": 200,
+    "max_width": 500,
+    "max_height": 300,
+    "min_width": 500,
+    "min_height": 300,
     "always-on-top": false,
     "fullscreen": false,
     "show_in_taskbar": true
@@ -31,8 +33,6 @@
   },
   "chromium-args": "-allow-file-access-from-files",
   "dependencies": {
-    "axios": "^0.18.0",
-    "iconv-lite": "^0.4.23",
-    "request": "^2.87.0"
+    "iconv-lite": "^0.4.23"
   }
 }
