@@ -9,7 +9,7 @@ module.exports = [{
   })]
 }, {
   name: '斗志昂扬-预约新职业斗士',
-  open: true,
+  open: false,
   bind: true,
   bindData: {
     iActivityId: 147030,
@@ -131,6 +131,20 @@ module.exports = [{
       iActivityId: 152141,
       iFlowId: item,
       sServiceDepartment: 'xinyue'
+    }
+  })]
+}, {
+  name: '加速畅玩-激爽一夏',
+  open: true,
+  bind: true,
+  bindData: {
+    iActivityId: 154296,
+    iFlowId: 481278
+  },
+  children: [...['481269', '481270', '481271', '481272', '481273', '481276', '481277', '481278', '481279', '481280', '481302', '481323', '481381'].map(item => {
+    return {
+      iActivityId: 154296,
+      iFlowId: item
     }
   })]
 }]

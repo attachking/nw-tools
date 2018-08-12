@@ -70,7 +70,7 @@ exports.http = function (
       'Host': Host,
       'Cookie': cookie || '',
       'Origin': Origin,
-      'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36'
+      'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.26 Safari/537.36 Core/1.63.6709.400 QQBrowser/10.2.2149.400'
     }
   }
   if (noHeader) delete options.headers

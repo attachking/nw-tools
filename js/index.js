@@ -15,6 +15,7 @@ function updateGTK() {
 }
 
 let activities = []
+
 // 处理活动
 function pullActivities() {
   origin_activities.forEach(item => {
@@ -28,9 +29,11 @@ function pullActivities() {
     }
   })
 }
+
 pullActivities()
 // 处理需要绑定的活动
 let bindings = []
+
 function handleBindings() {
   origin_activities.forEach(item => {
     if (item.open && item.bind) {
@@ -41,6 +44,7 @@ function handleBindings() {
     }
   })
 }
+
 handleBindings()
 
 let app = new Vue({
@@ -70,13 +74,13 @@ let app = new Vue({
       nw.Window.open(loginUrl, {
         'title': '快捷登录',
         'frame': true
-      }, function(new_win) {
+      }, function (new_win) {
         // 阻止登录框打开新页面
-        new_win.on('new-win-policy', function(frame, url, policy) {
+        new_win.on('new-win-policy', function (frame, url, policy) {
           policy.ignore()
         })
         new_win.hide()
-        new_win.on('loaded', function() {
+        new_win.on('loaded', function () {
           _this.isLogin = false
           this.show()
           // 登录完成后
@@ -213,6 +217,7 @@ function getUserInfo() {
     handleMessage(`登录出错：${JSON.stringify(err)}`)
   })
 }
+
 getUserInfo()
 
 // 获取大区信息
@@ -433,7 +438,7 @@ function handleMessage(msg) {
 
 // 不同平台的活动请求的接口可能不一样
 function handleOtherUrl(data, options) {
-  if (data.sServiceDepartment === 'xinyue'){
+  if (data.sServiceDepartment === 'xinyue') {
     xinyue(options)
   }
 }
