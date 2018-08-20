@@ -75,14 +75,8 @@ exports.http = function (
     }
   }
   if (noHeader) delete options.headers
-  let request
-  if (url.protocol === 'https:') {
-    request = https
-  } else {
-    request = http
-  }
   return new Promise((resolve, reject) => {
-    const req = request.request(options, res => {
+    const req = (url.protocol === 'https:' ? https : http).request(options, res => {
       let data = ''
       let converterStream = iconv.decodeStream(enCoding)
       res.pipe(converterStream)
