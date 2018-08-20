@@ -49,10 +49,11 @@ function handleBindings() {
 
 // 获取活动
 utils.http({
-  url: 'https://raw.githubusercontent.com/attachking/nw-tools/master/js/activities.js',
+  url: 'https://raw.githubusercontent.com/attachking/nw-tools/master/js/cloud_activities.js',
   noHeader: true
 }).then(res => {
-  console.log(res)
+  console.log(res.data)
+  console.log(cloud_activities)
 }).catch(err => {
   console.log(err)
 })

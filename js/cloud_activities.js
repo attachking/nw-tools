@@ -1,4 +1,4 @@
-let cloud_activities = [{
+var cloud_activities = [{
   name: '奥普斯的慷慨',
   open: false,
   children: [...[480656, 480664].map(item => {
