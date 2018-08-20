@@ -53,6 +53,7 @@ utils.http({
   noHeader: true
 }).then(res => {
   console.log(res.data)
+  console.log(eval(res.data))
   console.log(cloud_activities)
 }).catch(err => {
   console.log(err)
