@@ -1,5 +1,6 @@
 const node_url = require('url')
 const http = require('http')
+const https = require('https')
 const qs = require('querystring')
 const iconv = require('iconv-lite')
 
@@ -56,7 +57,7 @@ exports.http = function (
   const options = {
     protocol: url.protocol,
     hostname: url.host,
-    port: 80,
+    port: url.protocol === 'https:' ? 443 : 80,
     path: url.path + (getData.length ? `?${getData}` : ''),
     method: method,
     headers: {
@@ -74,8 +75,14 @@ exports.http = function (
     }
   }
   if (noHeader) delete options.headers
+  let request
+  if (url.protocol === 'https:') {
+    request = https
+  } else {
+    request = http
+  }
   return new Promise((resolve, reject) => {
-    const req = http.request(options, res => {
+    const req = request.request(options, res => {
       let data = ''
       let converterStream = iconv.decodeStream(enCoding)
       res.pipe(converterStream)

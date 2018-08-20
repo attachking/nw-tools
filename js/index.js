@@ -1,6 +1,6 @@
 const loginUrl = 'https://xui.ptlogin2.qq.com/cgi-bin/xlogin?proxy_url=http://game.qq.com/comm-htdocs/milo/proxy.html&appid=21000501&target=top&s_url=http%3A%2F%2Fbns.qq.com%2Fcp%2Fa20180725ops%2Findex.htm&style=20&daid=8'
 const utils = process.mainModule.exports
-const origin_activities = require('./activities')
+let origin_activities
 const getGTK = require('./g_tk')
 const STORAGE_USER = '__user__' // 用户信息
 const STORAGE_ROLE = '__role__' // 角色
@@ -30,7 +30,7 @@ function pullActivities() {
   })
 }
 
-pullActivities()
+// pullActivities()
 // 处理需要绑定的活动
 let bindings = []
 
@@ -45,7 +45,17 @@ function handleBindings() {
   })
 }
 
-handleBindings()
+// handleBindings()
+
+// 获取活动
+utils.http({
+  url: 'https://raw.githubusercontent.com/attachking/nw-tools/master/js/activities.js',
+  noHeader: true
+}).then(res => {
+  console.log(res)
+}).catch(err => {
+  console.log(err)
+})
 
 let app = new Vue({
   el: '#app',
