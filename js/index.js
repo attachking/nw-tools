@@ -1,6 +1,5 @@
 const loginUrl = 'https://xui.ptlogin2.qq.com/cgi-bin/xlogin?proxy_url=http://game.qq.com/comm-htdocs/milo/proxy.html&appid=21000501&target=top&s_url=http%3A%2F%2Fbns.qq.com%2Fcp%2Fa20180725ops%2Findex.htm&style=20&daid=8'
 const utils = process.mainModule.exports
-let origin_activities
 const getGTK = require('./g_tk')
 const STORAGE_USER = '__user__' // 用户信息
 const STORAGE_ROLE = '__role__' // 角色
@@ -17,7 +16,7 @@ function updateGTK() {
 let activities = []
 
 // 处理活动
-function pullActivities() {
+function pullActivities(origin_activities) {
   origin_activities.forEach(item => {
     if (item.open) {
       item.children.forEach((val, key) => {
@@ -30,11 +29,10 @@ function pullActivities() {
   })
 }
 
-// pullActivities()
 // 处理需要绑定的活动
 let bindings = []
 
-function handleBindings() {
+function handleBindings(origin_activities) {
   origin_activities.forEach(item => {
     if (item.open && item.bind) {
       bindings.push({
@@ -45,19 +43,23 @@ function handleBindings() {
   })
 }
 
-// handleBindings()
-
 // 获取活动
-utils.http({
-  url: 'https://raw.githubusercontent.com/attachking/nw-tools/master/js/cloud_activities.js',
-  noHeader: true
-}).then(res => {
-  console.log(res.data)
-  console.log(eval(res.data))
-  console.log(cloud_activities)
-}).catch(err => {
-  console.log(err)
-})
+function getAvtiveties() {
+  handleMessage('正在拉取最新活动...')
+  utils.http({
+    url: 'https://raw.githubusercontent.com/attachking/js-utils/master/cloud/cloud_activities.js',
+    noHeader: true
+  }).then(res => {
+    let origin_activities = eval(res.data)
+    origin_activities.forEach(item => {
+      handleMessage(item.name)
+    })
+    handleBindings(origin_activities)
+    pullActivities(origin_activities)
+  }).catch(err => {
+    handleMessage(err.message)
+  })
+}
 
 let app = new Vue({
   el: '#app',
@@ -159,6 +161,10 @@ let app = new Vue({
     },
     // 领取活动
     pull() {
+      if (!this.loginStatus) {
+        this.login()
+        return
+      }
       if (this.processing) {
         // 停止
         this.processing = false
@@ -196,10 +202,10 @@ let app = new Vue({
 })
 
 // 获取登录用户头像及昵称
-function getUserInfo() {
+async function getUserInfo() {
   let cookie = JSON.parse(localStorage.getItem(STORAGE_USER))
   if (!cookie) return
-  utils.http({
+  let res = await utils.http({
     url: 'http://qfwd.qq.com/',
     cookie: cookie.str,
     Referer: 'http://www.qq.com/',
@@ -211,7 +217,8 @@ function getUserInfo() {
       func: 'loginAll', // 回调函数
       ran: Math.random() // 随机数
     }
-  }).then(res => {
+  })
+  try {
     res = JSON.parse(res.data.replace(/(loginAll\()|(\);)/g, ''))
     if (Number(res.result) === 0) {
       handleMessage(`用户登录：${res.nick}登陆成功！`)
@@ -224,13 +231,18 @@ function getUserInfo() {
       handleMessage(`用户登录：${JSON.stringify(res)}`)
     }
     app.userInfo = res
-  }).catch(err => {
+  } catch (err) {
     app.loginStatus = false
     handleMessage(`登录出错：${JSON.stringify(err)}`)
-  })
+    throw err
+  }
 }
 
-getUserInfo()
+getUserInfo().then(() => {
+  getAvtiveties()
+}).catch(() => {
+  getAvtiveties()
+})
 
 // 获取大区信息
 async function getServer() {
