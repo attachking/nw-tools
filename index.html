@@ -17,20 +17,28 @@
     </div>
     <div class="main">
       <div class="userInfo">
-        <img :src="userInfo.Face" v-if="userInfo.nick">
-        <span :title="userInfo.nick">{{userInfo.nick || '未登录'}}</span>
-        <select v-model="server1" @change="handleServer1($event)">
-          <option value="">选择大区</option>
-          <option :value="val.v" v-for="(val, key) in servers" :key="key">{{val.t}}</option>
-        </select>
-        <select v-model="server2" @change="handleServer2($event)">
-          <option value="">选择服务器</option>
-          <option :value="val.v" v-for="(val, key) in servers2" :key="key">{{val.t}}</option>
-        </select>
-        <select v-model="server3" @change="handleServer3($event)">
-          <option value="">选择角色</option>
-          <option :value="val.value" v-for="(val, key) in servers3" :key="key">{{val.name}}</option>
-        </select>
+        <img :src="userInfo.Face" v-if="userInfo.nick" class="head">
+        <div class="right-box">
+          <div class="nick-box">
+            <span :title="userInfo.nick">{{userInfo.nick || '未登录'}}</span>
+            <span v-if="roleInfo.level">{{roleInfo.level}}级</span>
+            <span v-if="roleInfo.mlevel">洪门{{roleInfo.mlevel}}星</span>
+          </div>
+          <div class="server-box">
+            <select v-model="server1" @change="handleServer1($event)">
+              <option value="">选择大区</option>
+              <option :value="val.v" v-for="(val, key) in servers" :key="key">{{val.t}}</option>
+            </select>
+            <select v-model="server2" @change="handleServer2($event)">
+              <option value="">选择服务器</option>
+              <option :value="val.v" v-for="(val, key) in servers2" :key="key">{{val.t}}</option>
+            </select>
+            <select v-model="server3" @change="handleServer3($event)">
+              <option value="">选择角色</option>
+              <option :value="val.value" v-for="(val, key) in servers3" :key="key">{{val.name}}</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div class="log-con">
         <div class="log" id="log">
@@ -39,6 +47,7 @@
         <div class="pull">
           <button @click="login" class="login-btn">登录/切换账号</button>
           <button @click="pull" class="pull-btn">{{processing ? '停止' : '一键领取'}}</button>
+          <button @click="search">装备查询</button>
           <button @click="about">关于我们</button>
         </div>
       </div>

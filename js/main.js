@@ -2,7 +2,8 @@ const node_url = require('url')
 const http = require('http')
 const https = require('https')
 const qs = require('querystring')
-const iconv = require('iconv-lite')
+const iconv = require('iconv-lite') // 转码
+const zlib = require('zlib') // 解压gzip
 
 function domainCookies(url) {
   return new Promise((resolve, reject) => {
@@ -35,8 +36,9 @@ exports.http = function (
     enCoding = 'utf8',
     params = {},
     noHeader = false,
-    contentType = 'application/x-www-form-urlencoded',
-    Origin = 'http://www.qq.com'
+    contentType = 'application/x-www-form-urlencoded; charset=UTF-8',
+    Origin = 'http://www.qq.com',
+    Accept = '*/*'
   }
   ) {
   url = node_url.parse(url)
@@ -61,7 +63,7 @@ exports.http = function (
     path: url.path + (getData.length ? `?${getData}` : ''),
     method: method,
     headers: {
-      'Accept': '*/*',
+      'Accept': Accept,
       'Accept-Encoding': 'gzip, deflate',
       'Accept-Language': 'zh-CN,zh;q=0.9',
       'Connection': 'keep-alive',
@@ -79,7 +81,12 @@ exports.http = function (
     const req = (url.protocol === 'https:' ? https : http).request(options, res => {
       let data = ''
       let converterStream = iconv.decodeStream(enCoding)
-      res.pipe(converterStream)
+      let gunzipStream = zlib.createGunzip()
+      if (res.headers['content-encoding'] === 'gzip') {
+        res.pipe(gunzipStream).pipe(converterStream)
+      } else {
+        res.pipe(converterStream)
+      }
       converterStream.on('data', chunk => {
         data += chunk
       })

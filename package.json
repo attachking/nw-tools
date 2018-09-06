@@ -33,6 +33,7 @@
   },
   "chromium-args": "-allow-file-access-from-files",
   "dependencies": {
-    "iconv-lite": "^0.4.23"
+    "iconv-lite": "^0.4.23",
+    "zlib": "^1.0.5"
   }
 }

@@ -100,26 +100,38 @@ body, html {
 .userInfo {
     white-space: nowrap;
     padding: 10px 0;
+    display: flex;
+    align-items: center;
 }
 
-.userInfo img {
+.userInfo img.head {
     width: 10%;
     display: inline-block;
     vertical-align: middle;
     border: 1px solid #d9d9d9;
 }
 
+.userInfo .right-box{
+    flex: 1;
+    padding: 0 0 0 10px;
+}
+
+
+.userInfo .nick-box{
+    padding: 0 0 5px 0;
+}
+
+.userInfo .nick-box span:not(:first-child){
+    padding: 0 0 0 5px;
+}
+
 .userInfo span {
     display: inline-block;
     vertical-align: middle;
-    max-width: 15%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
-.userInfo select {
-    width: 25%;
+.userInfo .server-box select {
+    width: 30%;
     display: inline-block;
     vertical-align: middle;
     font-size: 12px;

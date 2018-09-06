@@ -78,7 +78,8 @@ let app = new Vue({
     roleName: '', // 角色name
     md5str: '', // 选择角色后获得的md5校验码
     checkparam: '', // 选择角色后获得的校验码
-    processing: false // 领取中
+    processing: false, // 领取中
+    roleInfo: {} // 角色等级、星级、职业信息
   },
   methods: {
     login() {
@@ -158,6 +159,7 @@ let app = new Vue({
       localStorage.setItem(STORAGE_ROLE, this.server3)
       localStorage.setItem(STORAGE_SERVER, this.server2)
       localStorage.setItem(STORAGE_AREA, this.server1)
+      this.getEquipment()
     },
     // 领取活动
     pull() {
@@ -185,6 +187,37 @@ let app = new Vue({
     },
     about() {
       alert(`Author：ChenJiYuan\nGitHub：attachking`)
+    },
+    search() {
+      nw.Window.open(`http://bang.qq.com/tool/bns/jsqb.htm?serverId=${this.server2}&roleName=${encodeURIComponent(this.roleName)}`, {
+        'title': `${this.serverName}`,
+        'frame': true,
+        'width': 636,
+        'height': 413,
+      }, function (new_win) {
+        // 阻止登录框打开新页面
+        new_win.on('new-win-policy', function (frame, url, policy) {
+          policy.ignore()
+        })
+      })
+    },
+    async getEquipment() { // 获取角色装备信息
+      let cookie = JSON.parse(localStorage.getItem(STORAGE_USER))
+      let res = await utils.http({
+        Accept: 'application/json, text/javascript, */*; q=0.01',
+        method: 'post',
+        url: 'http://bang.qq.com/ugc1/getJsqbData',
+        cookie: cookie.str,
+        Referer: 'http://bang.qq.com/tool/bns/jsqb.htm',
+        Host: 'bang.qq.com',
+        Origin: 'http://bang.qq.com',
+        data: {
+          serverId: this.server2,
+          roleName: encodeURIComponent(this.roleName)
+        }
+      })
+      let data = JSON.parse(res.data)
+      this.roleInfo = data.data
     }
   },
   created() {
