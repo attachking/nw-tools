@@ -4,6 +4,8 @@ const https = require('https')
 const qs = require('querystring')
 const iconv = require('iconv-lite') // 转码
 const zlib = require('zlib') // 解压gzip
+const upload = require('./upload')
+const path = require('path')
 
 function domainCookies(url) {
   return new Promise((resolve, reject) => {
@@ -104,3 +106,65 @@ exports.http = function (
     req.end()
   })
 }
+
+exports.Request = class {
+  constructor({url, enCoding = 'utf8'}) {
+    /*
+    * files     {file: {name: 'xxx', path: 'xxx'}}
+    * */
+    this.url = node_url.parse(url)
+    this.enCoding = enCoding
+    this.options = {
+      protocol: this.url.protocol,
+      hostname: this.url.hostname,
+      port: this.url.port,
+      path: this.url.path,
+      headers: {
+        'Accept': '*/*',
+        'Accept-Encoding': 'gzip, deflate',
+        'Accept-Language': 'zh-CN,zh;q=0.9',
+        'Connection': 'keep-alive',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.26 Safari/537.36 Core/1.63.6709.400 QQBrowser/10.2.2149.400'
+      }
+    }
+  }
+  upload() {
+    const req = this.createReq()
+    let files = {
+      file1: {
+        name: 'icon.png',
+        path: path.resolve(__dirname, '../icon.png')
+      }
+    }
+    const data = {
+      picSize: 5120,
+      remark: 160
+    }
+    upload(files, this.request, data)
+    return req
+  }
+  createReq() {
+    return new Promise((resolve, reject) => {
+      this.request = (this.url.protocol === 'https:' ? https : http).request(this.options, res => {
+        let data = ''
+        let converterStream = iconv.decodeStream(this.enCoding)
+        let gunzipStream = zlib.createGunzip()
+        if (res.headers['content-encoding'] === 'gzip') {
+          res.pipe(gunzipStream).pipe(converterStream)
+        } else {
+          res.pipe(converterStream)
+        }
+        converterStream.on('data', chunk => {
+          data += chunk
+        })
+        converterStream.on('end', () => {
+          resolve(data)
+        })
+      })
+      this.request.on('error', err => {
+        reject(err)
+      })
+    })
+  }
+}
+
